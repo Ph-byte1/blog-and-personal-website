@@ -14,6 +14,7 @@ dist/
 README.md
 notes.txt
 LICENSE
+authors/
 .github
 .prettierrc
 .prettierignore
