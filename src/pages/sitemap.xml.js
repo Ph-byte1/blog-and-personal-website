@@ -1,4 +1,4 @@
-import { SITE, authors, categories, sortedPosts, tags } from "../lib/blog-data.js";
+import { SITE, categories, sortedPosts, tags } from "../lib/blog-data.js";
 
 const BASE_URL = SITE.url || "";
 
@@ -25,11 +25,11 @@ export async function GET() {
       changefreq: "weekly",
       priority: "0.4",
     })),
-    ...authors.map((author) => ({
-      path: `/authors/${author.slug}`,
-      changefreq: "monthly",
-      priority: "0.5",
-    })),
+    // ...authors.map((author) => ({
+    //   path: `/authors/${author.slug}`,
+    //   changefreq: "monthly",
+    //   priority: "0.5",
+    // })),
   ];
 
   const urls = entries.map((entry) =>
