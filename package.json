@@ -8,9 +8,11 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/prune-unused-assets.mjs",
     "preview": "astro preview",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate-types": "wrangler types"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.2.3",
     "@astrojs/markdown-remark": "^7.2.4",
     "@astrojs/mdx": "^7.0.0",
     "@tailwindcss/vite": "^4.3.1",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "prettier": "^3.8.4",
-    "vite": "^8.1.2"
+    "vite": "^8.1.2",
+    "wrangler": "^4.125.0"
   }
 }

@@ -5,11 +5,14 @@ import tailwindcss from "@tailwindcss/vite";
 
 import expressiveCode from "astro-expressive-code";
 
+import cloudflare from '@astrojs/cloudflare';
+
 const site =
   process.env.SITE_URL || process.env.PUBLIC_SITE_URL || "https://flipthedata.site";
 
 export default defineConfig({
   site,
+
   integrations: [
     expressiveCode({
       themes: ['github-light', 'github-dark-dimmed'],
@@ -36,11 +39,14 @@ export default defineConfig({
     remarkPlugins: [remarkEmoji],
   }),
   ],
+
   markdown: {
     remarkPlugins: [remarkEmoji],
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
-});
 
+  adapter: cloudflare(),
+});
