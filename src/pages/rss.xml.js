@@ -1,4 +1,4 @@
-import { SITE, getAuthor, sortedPosts } from "../lib/blog-data.js";
+import { SITE, sortedPosts } from "../lib/blog-data.js";
 
 const BASE_URL = SITE.url || "";
 
