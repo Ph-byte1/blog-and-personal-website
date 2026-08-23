@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "version": "2.1.0",
+  "description": "A quiet Astro magazine theme for essays, field notes, and long-form writing.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/prune-unused-assets.mjs",
+    "preview": "astro preview",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.2.4",
+    "@astrojs/mdx": "^7.0.0",
+    "@tailwindcss/vite": "^4.3.1",
+    "astro": "^7.0.4",
+    "astro-expressive-code": "^0.44.0",
+    "lucide-astro": "^0.556.0",
+    "remark-emoji": "^5.0.2",
+    "tailwindcss": "^4.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.4",
+    "vite": "^8.1.2"
+  }
+}

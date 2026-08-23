@@ -1,0 +1,101 @@
+---
+const {
+  PUBLIC_GISCUS_REPO,
+  PUBLIC_GISCUS_REPO_ID,
+  PUBLIC_GISCUS_CATEGORY,
+  PUBLIC_GISCUS_CATEGORY_ID,
+  PUBLIC_GISCUS_MAPPING,
+  PUBLIC_GISCUS_STRICT,
+  PUBLIC_GISCUS_REACTIONS_ENABLED,
+  PUBLIC_GISCUS_EMIT_METADATA,
+  PUBLIC_GISCUS_INPUT_POSITION,
+  PUBLIC_GISCUS_LANG,
+} = import.meta.env;
+---
+
+<section class="comments">
+  <div id="giscus-container"></div>
+
+  <script
+    is:inline
+    define:vars={{
+      repo: PUBLIC_GISCUS_REPO,
+      repoId: PUBLIC_GISCUS_REPO_ID,
+      category: PUBLIC_GISCUS_CATEGORY,
+      categoryId: PUBLIC_GISCUS_CATEGORY_ID,
+      mapping: PUBLIC_GISCUS_MAPPING,
+      strict: PUBLIC_GISCUS_STRICT,
+      reactionsEnabled: PUBLIC_GISCUS_REACTIONS_ENABLED,
+      emitMetadata: PUBLIC_GISCUS_EMIT_METADATA,
+      inputPosition: PUBLIC_GISCUS_INPUT_POSITION,
+      lang: PUBLIC_GISCUS_LANG,
+    }}
+  >
+    (function () {
+      function getTheme() {
+        return document.documentElement.classList.contains("dark")
+          ? "dark"
+          : "light";
+      }
+
+      // Build the giscus script tag ourselves so we can set the correct
+      // data-theme immediately, instead of always booting in "light" and
+      // hoping a later postMessage fixes it.
+      var script = document.createElement("script");
+      script.src = "https://giscus.app/client.js";
+      script.setAttribute("data-repo", repo);
+      script.setAttribute("data-repo-id", repoId);
+      script.setAttribute("data-category", category);
+      script.setAttribute("data-category-id", categoryId);
+      script.setAttribute("data-mapping", mapping);
+      script.setAttribute("data-strict", strict);
+      script.setAttribute("data-reactions-enabled", reactionsEnabled);
+      script.setAttribute("data-emit-metadata", emitMetadata);
+      script.setAttribute("data-input-position", inputPosition);
+      script.setAttribute("data-lang", lang);
+      script.setAttribute("data-loading", "lazy");
+      script.setAttribute("data-theme", getTheme());
+      script.crossOrigin = "anonymous";
+      script.async = true;
+      document.getElementById("giscus-container").appendChild(script);
+
+      function sendGiscusTheme() {
+        var iframe = document.querySelector("iframe.giscus-frame");
+        if (!iframe) return;
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: getTheme() } } },
+          "https://giscus.app"
+        );
+      }
+
+      // Because data-loading="lazy", the iframe doesn't exist right away —
+      // it only appears once giscus's own IntersectionObserver decides to
+      // load it. Poll for it, then wait for its "load" event (which fires
+      // once the giscus app inside is actually running) before pushing a
+      // theme update.
+      function waitForGiscusIframe() {
+        var iframe = document.querySelector("iframe.giscus-frame");
+        if (!iframe) {
+          requestAnimationFrame(waitForGiscusIframe);
+          return;
+        }
+        iframe.addEventListener("load", function () {
+          setTimeout(sendGiscusTheme, 100);
+        });
+      }
+      waitForGiscusIframe();
+
+      // Re-sync whenever the site's dark-mode toggle flips the "dark"
+      // class on <html> (small delay so a just-appearing iframe has time
+      // to attach its own listener too).
+      new MutationObserver(function () {
+        setTimeout(sendGiscusTheme, 150);
+      }).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    })();
+  </script>
+
+  <noscript>Please enable JavaScript to view the comments.</noscript>
+</section>

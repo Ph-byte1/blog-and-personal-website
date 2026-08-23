@@ -1,0 +1,171 @@
+---
+title: "Create Spotify playlist from web scraped radio chart"
+excerpt: "Web scraping a chart from radio station's website and make it a Spotify playlist with the Spotify API."
+pubDate: 2026-08-22
+# updatedDate: 2026-08-22
+category: "flipthedata"
+tags: ["python", "web", "process", "projects"]
+unlisted: false
+draft: false
+# author: "philip-van-laar"
+thumbnail: ./cover.jpg
+thumbnailAlt: "Audio mixing table."
+imageCredit:
+  caption: "Audio mixing table."
+  author: "Sašo Tušar"
+  authorUrl: "https://unsplash.com/@sasotusar"
+  source: "Unsplash"
+  sourceUrl: "https://unsplash.com/photos/shallow-focus-photography-of-audio-mixer-QtgGYlug6Cw"
+featured: true
+---
+
+## Introduction
+
+My favourite radio station published a chart on their website: the top 500 alt-rock songs from the 90s (2025 edition). 
+However, the problem was they never turned it into a Spotify playlist. As someone who is more interested in writing code than manually clicking "Add to playlist" 500 times, I decided to automate this process instead. 
+So, using Python, I built a small pipeline that scrapes the chart from the radio station's website and turns it into a real Spotify playlist. 
+
+You can find the original chart here (in Dutch): [KINK 90's Top 500 2025](https://kink.nl/nieuws/kink-90s-top-500-2025).
+
+### Workflow overview
+
+The project came down to two main steps:
+1. Scrape the chart from the website of KINK, my favourite Dutch radio station.
+2. Turn the scraped data into a Spotify playlist using the Spotify API.
+
+## The Process
+
+### Part 1 - Web scraping
+
+{/* > <img src="https://app.notion.com/icons/report_blue.svg" alt="https://app.notion.com/icons/report_blue.svg" width="40px" /> */}
+> :information_source: **Script summary:**
+>
+> Used a separate script for this part: `webscraping.py`. 
+> This script takes a URL, returns the specific HTML elements that contains the song and artist data, and stores everything in a Python dictionary.
+> The dictionary is converted into a Pandas DataFrame (`.from_dict` automatically includes an Index, ([source](https://saturncloud.io/blog/resolving-valueerror-if-using-all-scalar-values-you-must-pass-an-index-when-merging-multiple-dataframes/))) and saved as an Excel file.
+
+I started with web scraping the chart from the website of the radio station with the Python library [`BeautifulSoup4`](https://www.crummy.com/software/BeautifulSoup/bs4/doc/).
+To find the right data, I opened the KINK website in my browser (Firefox is great option ;) ) and inspected the page with the browser's dev tools.
+- Each entry in the chart lives inside a `div` block with a long Tailwind CSS class name.
+    
+    ![image.png](image%201.png)
+    *Inspecting the HTML code of the radio station's website.*
+    
+- Digging one level deeper, each chart entry with the actual artist-song combination lives inside a `span` block with the class name `"line-clamp-1"`
+    
+    ![image.png](image%202.png)
+    *Identifying the HTML block of the artist-song combination in the website code.*
+    
+This specific HTML block could be extracted directly with `BeautifulSoup4`:
+```python
+songs = soup.find_all("span", attrs={'class':"line-clamp-1"})
+print(songs)
+print(len(songs))
+```
+Which returend:
+```
+[<span class="line-clamp-1">Oasis<!-- --> - <!-- -->Champagne Supernova</span>, 
+<span class="line-clamp-1">Nirvana<!-- --> - <!-- -->Smells Like Teen Spirit</span>, 
+<span class="line-clamp-1">Pearl Jam<!-- --> - <!-- -->Black</span>, 
+<span class="line-clamp-1">Foo Fighters<!-- --> - <!-- -->Everlong</span>,
+...
+<span class="line-clamp-1">INXS<!-- --> - <!-- -->Disappear</span>, 
+<span class="line-clamp-1">Metallica<!-- --> - <!-- -->Turn The Page</span>, 
+<span class="line-clamp-1">Fatboy Slim<!-- --> - <!-- -->Right Here, Right Now</span>, 
+<span class="line-clamp-1">Oasis<!-- --> - <!-- -->D'You Know What I Mean?</span>]
+500
+```
+
+My first attempt used `find_all(attrs={'class':"line-clamp-1"})` without specifying the tag, but this also retrieved the currently playing song shown at the bottom of the webpage.
+Luckily, the currently playing song lives in a `p` block rather than in a `span` block, so I was able to specifiy the search and only retrieve the 500 entries of the chart.
+
+From there, the response was transferred to a DataFrame with three columns: an index, the artist name and the song title.
+
+At first, building the DataFrame failed with: `ValueError: If using all scalar values, you must pass an index`. 
+This happend when you try to create a DataFrame from scalar values without explicity providing an index ([source](https://saturncloud.io/blog/resolving-valueerror-if-using-all-scalar-values-you-must-pass-an-index-when-merging-multiple-dataframes/)).
+Creating a DataFrame using `.from_dict` solved it, since it automatically includes an Index. The DataFrame was then simply exported to Excel with Pandas' `.to_excel` function.
+
+### Part 2 - Spotify API
+
+{/* > <img src="https://app.notion.com/icons/report_blue.svg" alt="https://app.notion.com/icons/report_blue.svg" width="35px" />  */}
+> :information_source: Scripts: `make_spotify_playlist_from_excel.py` & `search.py`
+
+With the chart safely in an Excel file, the next step was pushing it into a Spotify playlist.
+- First a Python script was created and start of with some authentication code that makes sure to connect with the Spotify API through the `Spotipy` Python library.
+- **Authentication:** After the first OAuth call, Spotify redirects to a Google Address containing an authentication code, which should be pasted back into the IDE to complete the login flow. 
+The authentication process should only be repeated after 180 days of inactivity.
+
+    ![image.png](image%203.png)
+    *Retrieving the Spotify API URL.*
+- After the authentication part came the `Spotipy` code to create and populate a playlist with the entries from the Excel file one at the time.
+    
+When executing the `make_spotify_playlist_from_excel.py` script for the first couple of times it returned errors because the scraped chart data contained some spelling errors. 
+The Spotify API couldn't handle these because it has no 'search margin' (fuzzy matching). 
+As a workaround, I wrote a simple search `search.py` script to look up the songs via the Spotify API and get their correct titles.
+
+Some of the spelling errors in the scraped data:
+
+| Scraped text | Correct Spotify title |
+|---|---|
+| Green Day — "Good Riddance (Time of *Our* Lives)" | "Good Riddance (Time of *Your* Life)" |
+| KLF — "Last Train To Transcentral" | "Last Train To Trancentral" |
+| Iggy Pop & Kate Pierson — "Candy" | Iggy Pop — "Candy" |
+| Baz Luhrmann — "Everybody's Free (To Wear Sunscreen)" | 90s Classics — "Everybody's Free (To Wear Sunscreen)" |
+
+After correcting these entries in the Excel file and re-running the script, it worked:
+    
+    ![image.png](image%204.png)
+    *The Spotify API confirming the playlist was created succesfully.*
+    
+    ![image.png](image%205.png)
+    *The resulting Spotify playlist with the 500 alt-rock songs, success!*
+
+## Things I learned
+
+- Using `BeautifulSoup4` in a real project and scraping from a real third-party website.
+    - Used some examples from Codecademy's lesson on web scraping with `BeautifulSoup4`.
+- A refresher on some Pandas workings.
+    - Building a DataFrame from a dictionary with `.from_dict()` avoids the "all scalar values" index error ([article](https://saturncloud.io/blog/resolving-valueerror-if-using-all-scalar-values-you-must-pass-an-index-when-merging-multiple-dataframes/)).
+    - Used `df['column'].to_list()` for faster iteration, beause `.iterrows()` from Pandas itself is way slower as stated in [this article](https://medium.com/data-science/efficiently-iterating-over-rows-in-a-pandas-dataframe-7dd5f9992c01).
+- Python Environments Variables for API calls.
+    - Storing API credentials in environment variables rather than hardcoding them using [Codecademy's article on Python environment variables](https://www.codecademy.com/article/python-environment-variables).
+- The Spotify API with the `Spotipy` Python library.
+    - Some of the core building blocks used from [`Spotipy`](https://spotipy.readthedocs.io/en/2.22.1/#).
+    ```python
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
+    # scope = 'playlist-modify-private'
+
+    user_id = sp.current_user()["id"]
+    new_playlist = sp.user_playlist_create(user=user_id, name="[...]")
+
+    track_results = sp.search(q=f"track:{song} artist:{artist}", type='track')
+    sp.playlist_add_items(new_playlist['id'], [track_results['tracks']['items'][0]['uri']])
+    ```
+
+## Wrapping up
+
+What started as "I don't want to add 500 songs by hand" turned into a nice little hobby project: scraping a real website, wrangling messy data in Pandas, and pushing it into a working Spotify playlist through the API.
+The spelling errors were a good reminder that (scraped) data is rarely clean. 
+
+Got ideas on how to improve this, spotted a better way to handle the fuzzy-matching problem, or just want to share your thoughts on this? Drop a comment below - I'd love to hear about it!
+
+## Resources
+
+- [KINK 90s Top 500 2025 chart](https://kink.nl/nieuws/kink-90s-top-500-2025)
+- [Beautiful Soup documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+- [Spotify Web API documentation](https://developer.spotify.com/documentation/web-api)
+- [Reference tutorial (YouTube)](https://www.youtube.com/watch?v=WAmEZBEeNmg)
+- [Codecademy's article on Python environment variables](https://www.codecademy.com/article/python-environment-variables)
+
+All Python libraries used:
+```python
+import requests
+from bs4 import BeautifulSoup
+
+import os
+import pandas as pd
+from dotenv import load_dotenv
+
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+```
