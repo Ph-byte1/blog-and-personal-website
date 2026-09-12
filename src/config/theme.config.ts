@@ -79,6 +79,7 @@ export const tags = [
   { slug: "reference", name: "Reference" },
   { slug: "diy", name: "DIY" },
   { slug: "projects", name: "Projects" },
+  { slug: "spotify", name: "Spotify" },
 ];
 
 // export const authors = [
