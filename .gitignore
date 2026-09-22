@@ -21,6 +21,7 @@ authors/
 about_improve_SB_leftside.astro
 about_improve_SB_rightside.astro
 about_original.astro
+.wrangler/
 
 # Editor directories and files
 .vscode/*

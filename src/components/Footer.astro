@@ -52,5 +52,65 @@ const { flush = false } = Astro.props;
       <div>&copy; {new Date().getFullYear()} {SITE.name}. Analytically made on the open web.</div>
       <div>Built with Astro & the Quiet Pages theme.</div>
     </div>
+    <div id="goatcounter-widget" class="flex justify-center pb-2 text-xs text-muted-foreground"></div>
   </div>
 </footer>
+
+<script>
+  var t = setInterval(function () {
+    if (window.goatcounter && window.goatcounter.visit_count) {
+      clearInterval(t);
+      window.goatcounter.visit_count({
+        append: "#goatcounter-widget",
+        no_branding: true,
+        // attr: { width: "auto", height: "auto" },
+        style: `
+          div {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            width: auto;
+            height: auto;
+            border: 1px solid oklch(0.90 0.006 85);
+            background-color: oklch(0.95 0.004 85);
+            color: oklch(0.52 0.012 65);
+            font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            line-height: 1;
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+          }
+          #gcvc-for {
+            color: oklch(0.52 0.012 65);
+          }
+          #gcvc-views {
+            color: oklch(0.235 0.015 65);
+            font-weight: 600;
+          }
+          #gcvc-by {
+            display: none;
+          }
+          .dark div {
+            border-color: oklch(0.34 0.005 70);
+            background-color: oklch(0.27 0.005 70);
+            color: oklch(0.72 0.01 75);
+          }
+          .dark #gcvc-for {
+            color: oklch(0.72 0.01 75);
+          }
+          .dark #gcvc-views {
+            color: oklch(0.92 0.008 85);
+          }
+        `,
+      });
+    }
+  }, 100);
+</script>
+ 
+<!-- GoatCounter -->
+<script
+  data-goatcounter="https://philipvl45.goatcounter.com/count"
+  async
+  src="//gc.zgo.at/count.js"></script>
