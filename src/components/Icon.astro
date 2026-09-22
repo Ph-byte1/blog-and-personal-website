@@ -14,9 +14,10 @@ import {
   Twitter,
   CalendarDays,
   Clock,
-  ChevronDown
+  ChevronDown,
+  MapPin,
 } from "lucide-astro";
-import ArrowBigDown from "lucide-astro/dist/ArrowBigDown.astro";
+// import ArrowBigDown from "lucide-astro/dist/ArrowBigDown.astro";
 // import ChevronDown from "lucide-astro/dist/ChevronDown.astro";
 
 const { name, class: className = "", width = 24, height = 24 } = Astro.props;
@@ -59,7 +60,8 @@ const lucideIcons = {
   twitter: Twitter,
   "calendar-days": CalendarDays,
   clock: Clock,
-  arrowdown: ChevronDown
+  arrowdown: ChevronDown,
+  "map-pin": MapPin,
 };
 
 const normalizedName = typeof name === "string" ? name.replace(/^lucide:/, "") : "";

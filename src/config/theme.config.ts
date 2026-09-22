@@ -19,7 +19,7 @@ const siteUrl = (
 export const SITE = {
   name: "FlipTheData",
   description:
-    "An independent blog on analyzing all kinds of data, DIY journeys on self hosting and open-source software, and building things. Published occasionally, read closely.",
+    "An independent blog on some hobby projects, from analyzing all kinds of (geo)data to DIY journeys on self hosting, open-source software, and building stuff. Published occasionally, read closely.",
   url: siteUrl,
   locale: "en-GB",
   language: "en",
@@ -41,7 +41,7 @@ export const CONTACT = {
 
 export const FORMS = {
   contact: {
-    action: "",
+    action: "/api/contact",
     method: "post",
     enctype: "application/x-www-form-urlencoded",
   },

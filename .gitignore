@@ -18,6 +18,9 @@ authors/
 .github
 .prettierrc
 .prettierignore
+about_improve_SB_leftside.astro
+about_improve_SB_rightside.astro
+about_original.astro
 
 # Editor directories and files
 .vscode/*
@@ -34,3 +37,4 @@ authors/
 .env
 .env.production
 .env.*.local
+.dev.vars

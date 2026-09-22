@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
-import { SITE /*, authors*/ } from "../lib/blog-data.js";
+import Icon from "../components/Icon.astro";
+import { SITE } from "../lib/blog-data.js";
+import { CONTACT, SOCIAL_LINKS } from "../config/theme.config.ts";
 ---
 
 <BaseLayout
@@ -10,46 +12,288 @@ import { SITE /*, authors*/ } from "../lib/blog-data.js";
   canonical="/about"
   flushFooter
 >
-  <div class="mx-auto max-w-3xl px-5 py-12">
+  <div class="mx-auto max-w-5xl px-5 py-12">
     <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "About" }]} />
 
-    <header class="mt-6">
-      <div class="text-xs font-medium uppercase tracking-[0.2em] text-primary">About</div>
-      <h1 class="mt-2 font-serif text-5xl font-semibold leading-[1.05]">
-        A quiet magazine for the open web.
-      </h1>
-    </header>
+    <div class="mt-7 grid gap-12 lg:grid-cols-[280px_1fr] lg:gap-16">
+      <!-- Sidebar -->
+      <aside class="lg:sticky lg:top-18 lg:self-start">
+        <div class="rounded-xl border border-border bg-card p-6">
+          <img
+            src="/avatar.jpg"
+            alt="Philip van Laar"
+            width="88"
+            height="88"
+            class="rounded-full border border-border object-cover"
+            style="height: 8.5rem; width: 8.5rem;"
+          />
+          <h1 class="mt-5 font-serif text-2xl font-semibold leading-tight">Philip van Laar</h1>
+          <p class="mt-1 text-sm font-medium text-primary">Advisor Urban Water | Founding Author</p>
+          <p class="flex items-center gap-2 mt-1 text-sm text-muted-foreground"><Icon name="lucide:map-pin" class="h-3.5 w-3.5" />Gouda, The Netherlands</p>
 
-    <div class="prose-article mt-10">
-      <p>
-        {SITE.name} began as a folder of notes, drafts, and half-finished essays &mdash; the kind of writing that doesn't survive the timeline. We started publishing it here because we wanted somewhere slower to read, and somewhere slower to write.
-      </p>
-      <p>
-        The magazine is independent, occasional, and unsponsored. We publish when the work is ready and not before. There are no trackers, no pop-ups, and no infinite scroll. Just sentences, photographs, and the occasional conversation.
-      </p>
-      <h2 id="what-we-publish">What we publish</h2>
-      <p>
-        Essays on writing, design, and the craft of the web. Field notes from places we love. Interviews with people who make things with their hands. The occasional photograph, when one is worth printing.
-      </p>
-      <h2 id="who-we-are">Who we are</h2>
-      <p>A small editorial team, scattered across three time zones, who would rather be reading.</p>
-    </div>
+          <div class="mt-4 space-y-2 border-t border-border pt-3 text-sm">
+            <ul class="mt-1 space-y-3 text-sm">
+              <li><a href={`mailto:${CONTACT.email}`} class="flex items-center gap-2 hover:text-primary"><Icon name="mail" class="h-3.5 w-3.5" /> {CONTACT.email}</a></li>
+              <li><a href={CONTACT.socialUrl} class="flex items-center gap-2 hover:text-primary"><Icon name="linkedin" class="h-3.5 w-3.5" /> {CONTACT.socialHandle}</a></li>
+              <li><a href={SITE.repositoryUrl} class="flex items-center gap-2 hover:text-primary"><Icon name="github" class="h-3.5 w-3.5" /> GitHub</a></li>
+            </ul>
+          </div>
+        </div>
 
-    <!-- <section class="mt-12 border-t border-border pt-10">
-      <h2 class="font-serif text-2xl font-semibold">Contributors</h2>
-      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          authors.map((author) => (
-            <a href={`/authors/${author.slug}`} class="group flex items-start gap-3">
-              <img src={author.avatar} alt="" width="48" height="48" class="h-12 w-12 rounded-full" />
-              <div>
-                <div class="font-serif text-base font-semibold group-hover:text-primary">{author.name}</div>
-                <div class="mt-1 text-sm text-muted-foreground">{author.bio}</div>
+        <div class="mt-2.5 rounded-xl border border-border bg-card p-6">
+          <h2 class="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">Skills</h2>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Sewer systems</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">InfoWorks ICM</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">(Geo) Data Analysis</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">EPANET</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Advising</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">QGIS</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Cartography</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Climate Change &amp; Adaptation</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Python</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">SQL</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Linux</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">MS Office</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">Research</li>
+            <li class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">HTML, Astro &amp; (Tailwind) CSS</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main column -->
+      <div class="min-w-0">
+        <header>
+          <div class="text-xs font-medium uppercase tracking-[0.2em] text-primary">About</div>
+          <h2 class="mt-2 font-serif text-4xl font-semibold leading-[1.1] sm:text-5xl">
+            A blog for the open web
+          </h2>
+        </header>
+
+        <!-- Professional summary about me and the website -->
+        <div class="prose-article mt-8 max-w-none">
+          <p>
+            {SITE.name} began as a folder of notes, drafts, and half-finished essays &mdash; the kind of writing that doesn't survive the timeline. I started publishing it here because I wanted somewhere slower to read, and somewhere slower to write.
+          </p>
+          <p>
+            The blog is independent, occasional, and unsponsored. I publish when the work is ready and not before. There are no trackers, no pop-ups, and no infinite scroll. Just nerdy sentences, photos, and the occasional discussion.
+          </p>
+          <p>
+            Below you can find a brief overview of my professional experiences, selected projects, and some of the skills I have acquired over the years. If you would like to get in touch, please feel free to reach out via email, connect with me on LinkedIn or leave a message on the <a href="/contact" class="text-primary underline decoration-1 underline-offset-3 hover:decoration-2">contact page</a>.
+          </p>
+        </div>
+        
+        <!-- Experiences -->
+        <section class="mt-12">
+          <h2 class="border-b border-border pb-3 font-serif text-2xl font-semibold">Experiences</h2>
+          <ol class="mt-6 [&>li:last-child_.timeline-line]:invisible [&>li:last-child>div:last-child]:pb-0">
+            <li class="relative grid grid-cols-[1.0rem_1fr] gap-x-5">
+              <div class="flex flex-col items-center">
+                <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-primary ring-4 ring-background"></span>
+                <span class="timeline-line mt-1 w-px flex-1 bg-border"></span>
               </div>
+              <div class="pb-10">
+                <div class="text-xs font-medium uppercase tracking-wide text-muted-foreground">2026 — Present</div>
+                <h3 class="mt-1.5 flex flex-wrap items-center gap-x-2 font-serif text-lg font-semibold">
+                  <span>Founding Author</span>
+                  <span aria-hidden="true">&middot;</span>
+                  <a href="https://flipthedata.site/" class="group/co inline-flex items-center gap-0.5 text-primary hover:underline">
+                    {SITE.name}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover/co:-translate-y-0.5 group-hover/co:translate-x-0.5">
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  </a>
+                </h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">Remote</div>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-foreground">
+                  Write, edit, and tinker on some hobby projects. Maintain the small website.
+                </p>
+              </div>
+            </li>
+            <li class="relative grid grid-cols-[1.0rem_1fr] gap-x-5">
+              <div class="flex flex-col items-center">
+                <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-primary ring-4 ring-background"></span>
+                <span class="timeline-line mt-1 w-px flex-1 bg-border"></span>
+              </div>
+              <div class="pb-10">
+                <div class="text-xs font-medium uppercase tracking-wide text-muted-foreground">2024 — Present</div>
+                <h3 class="mt-1.5 flex flex-wrap items-center gap-x-2 font-serif text-lg font-semibold">
+                  <span>Advisor Urban Water</span>
+                  <span aria-hidden="true">&middot;</span>
+                  <a href="https://www.waterfeit.nl/#home" class="group/co inline-flex items-center gap-0.5 text-primary hover:underline">
+                    Waterfeit Adviseurs
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover/co:-translate-y-0.5 group-hover/co:translate-x-0.5">
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  </a>
+                </h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">Bergschenhoek, The Netherlands</div>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-foreground">
+                  I began my career at Waterfeit Adviseurs as a junior urban water consultant. 
+                  Here, I worked extensively with InfoWorks ICM and developed my skills to a level where I could carry out 1D, 1D2D and 2D sewerage calculations independently. 
+                  Using the results of these calculations, I was able to formulate various recommendations regarding the sewerage system and incorporate these into sewerage plans. 
+                  In addition, I gained a thorough understanding of the EPANET programme by developing pressure sewerage models for various local authorities. 
+                  I then further analysed the EPANET models using Python.
+                </p>
+              </div>
+            </li>
+            <li class="relative grid grid-cols-[1.0rem_1fr] gap-x-5">
+              <div class="flex flex-col items-center">
+                <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-primary ring-4 ring-background"></span>
+                <span class="timeline-line mt-1 w-px flex-1 bg-border"></span>
+              </div>
+              <div class="pb-10">
+                <div class="text-xs font-medium uppercase tracking-wide text-muted-foreground">oct 2023 — apr 2024</div>
+                <h3 class="mt-1.5 flex flex-wrap items-center gap-x-2 font-serif text-lg font-semibold">
+                  <span>Intern</span>
+                  <span aria-hidden="true">&middot;</span>
+                  <a href="https://nelen-schuurmans.nl/" class="group/co inline-flex items-center gap-0.5 text-primary hover:underline">
+                    Nelen &amp; Schuurmans
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover/co:-translate-y-0.5 group-hover/co:translate-x-0.5">
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  </a>
+                </h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">Utrecht, The Netherlands</div>
+                <p class="mt-2 text-[0.90rem] leading-relaxed text-foreground">
+                  During my master's internship at Nelen & Schuurmans, I conducted an exploratory study on the progress of monitoring climate resilience within the municipality of Utrecht. 
+                  To mitigate the effects of climate change, the municipality aims to be climate-proof by 2050. 
+                  In the first research phase, I investigated qualitatively (interview) how the Water and Registration Information System (WRIS) is being used to monitor climate adaptation progress, with a specific focus on drought. 
+                  In the second phase, I quantitatively investigated soil storage capacity (effective porosity) by analysing time series of groundwater levels using a Python script and the Pastas model.
+                </p>
+              </div>
+            </li>
+            <li class="relative grid grid-cols-[1.0rem_1fr] gap-x-5">
+              <div class="flex flex-col items-center">
+                <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-primary ring-4 ring-background"></span>
+                <span class="timeline-line mt-1 w-px flex-1 bg-border"></span>
+              </div>
+              <div class="pb-10">
+                <div class="text-xs font-medium uppercase tracking-wide text-muted-foreground">feb 2021 — aug 2021</div>
+                <h3 class="mt-1.5 flex flex-wrap items-center gap-x-2 font-serif text-lg font-semibold">
+                  <span>Graduate Intern</span>
+                  <span aria-hidden="true">&middot;</span>
+                  <a href="https://www.adcim.nl/home.html" class="group/co inline-flex items-center gap-0.5 text-primary hover:underline">
+                    ADCIM B.V.
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover/co:-translate-y-0.5 group-hover/co:translate-x-0.5">
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  </a>
+                </h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">Sliedrecht, The Netherlands</div>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-foreground">
+                  During my graduation period (course: Water Management) at ADCIM B.V., I investigated how the new D-Hydro simulation software package compares with Sobek 2 for modelling sewer systems. 
+                  In two case studies, I independently investigated the operation of D-Hydro and compared it with Sobek 2, with the aim of evaluating the added value of D-Hydro for the Water Department. 
+                  I presented the results at a working session for feedback. I successfully completed this interesting internship with a rating of 7.6!
+                </p>
+              </div>
+            </li>
+            <li class="relative grid grid-cols-[1.0rem_1fr] gap-x-5">
+              <div class="flex flex-col items-center">
+                <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-primary ring-4 ring-background"></span>
+                <span class="timeline-line mt-1 w-px flex-1 bg-border"></span>
+              </div>
+              <div class="pb-10">
+                <div class="text-xs font-medium uppercase tracking-wide text-muted-foreground">sep 2019 — jan 2020</div>
+                <h3 class="mt-1.5 flex flex-wrap items-center gap-x-2 font-serif text-lg font-semibold">
+                  <span>International Intern</span>
+                  <span aria-hidden="true">&middot;</span>
+                  <a href="https://www.schielandendekrimpenerwaard.nl/" class="group/co inline-flex items-center gap-0.5 text-primary hover:underline">
+                    Hoogheemraadschap van Schieland en de Krimpenerwaard
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover/co:-translate-y-0.5 group-hover/co:translate-x-0.5">
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  </a>
+                </h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">Rotterdam, The Netherlands</div>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-foreground">
+                  International trainee: research and advice of one still unknown polder system in Pekalongan, Indonesia.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <!-- Selected Projects -->
+        <section class="mt-14">
+          <h2 class="border-b border-border pb-3 font-serif text-2xl font-semibold">Selected projects</h2>
+          <p class="mt-2 text-sm leading-relaxed text-foreground">
+                TBD
+          </p>
+          <!-- <div class="mt-8 grid gap-5 sm:grid-cols-2">
+            <a href="#" class="group block rounded-xl border border-border bg-card p-5 hover:border-primary">
+              <h3 class="font-serif text-base font-semibold group-hover:text-primary">The Slow Web Reader</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+                A distraction-free reading list tool built for the magazine's archive, with no accounts and no tracking.
+              </p>
             </a>
-          ))
-        }
+            <a href="#" class="group block rounded-xl border border-border bg-card p-5 hover:border-primary">
+              <h3 class="font-serif text-base font-semibold group-hover:text-primary">Field Notes Zine</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+                A twice-yearly print companion collecting the magazine's photography and short dispatches.
+              </p>
+            </a>
+            <a href="#" class="group block rounded-xl border border-border bg-card p-5 hover:border-primary">
+              <h3 class="font-serif text-base font-semibold group-hover:text-primary">Type Specimen Site</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+                A small reference site cataloguing the typefaces used across every issue, with notes on why each was chosen.
+              </p>
+            </a>
+            <a href="#" class="group block rounded-xl border border-border bg-card p-5 hover:border-primary">
+              <h3 class="font-serif text-base font-semibold group-hover:text-primary">Letters Archive</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+                An open archive of reader correspondence, organised by theme rather than date.
+              </p>
+            </a>
+          </div> -->
+        </section>
+
+        <!-- Education -->
+        <section class="mt-14">
+          <h2 class="border-b border-border pb-3 font-serif text-2xl font-semibold">Education</h2>
+          <div class="mt-8 space-y-6">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h3 class="font-serif text-base font-semibold">Utrecht University</h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">MSc, Earth, Surface &amp; Water; track Hydrology</div>
+                <p class="mt-2 max-w-prose text-sm leading-relaxed text-muted-foreground">
+                  Thesis: Reconstructed and analysed the sensitive hydrology and trends of the endorheic lakes in the East African Rift System (EARS) using the PCR-GLOBWB model and two precipitation datasets, W5E5 and CHIRPS, for the period 1981-2019.
+                </p>
+              </div>
+              <div class="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground sm:pt-0.5">2021 — 2024</div>
+            </div>
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h3 class="font-serif text-base font-semibold">Rotterdam University of Applied Sciences</h3>
+                <div class="mt-0.5 text-sm text-muted-foreground">HBO, Water Management</div>
+              </div>
+              <div class="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground sm:pt-0.5">2017 — 2021</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- <section class="mt-14 border-t border-border pt-10">
+          <h2 class="font-serif text-2xl font-semibold">Contributors</h2>
+          <div class="mt-6 grid gap-6 sm:grid-cols-2">
+            {
+              authors.map((author) => (
+                <a href={`/authors/${author.slug}`} class="group flex items-start gap-3">
+                  <img src={author.avatar} alt="" width="48" height="48" class="h-12 w-12 rounded-full" />
+                  <div>
+                    <div class="font-serif text-base font-semibold group-hover:text-primary">{author.name}</div>
+                    <div class="mt-1 text-sm text-muted-foreground">{author.bio}</div>
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+        </section> -->
       </div>
-    </section> -->
+    </div>
   </div>
 </BaseLayout>
